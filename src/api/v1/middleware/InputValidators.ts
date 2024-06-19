@@ -10,3 +10,11 @@ export function requiredInput(
     .escape()
     .trim()
 }
+
+export function espcateInput(
+    value : string, 
+) : ValidationChain{
+    return check(value)
+    .escape()
+    .trim()
+}
