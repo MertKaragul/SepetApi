@@ -16,7 +16,28 @@ export async function accessTokenValidate(req : Request,res : Response, next :Ne
         if(findUser == null)
             throw new ResponseModel("User not found", 400)
 
-        res.locals.token = getToken
+        res.locals.userId = decode["userId"]
+        res.locals.role = decode["role"]
+        next()
+    }catch(e){
+        next(e)
+    }
+}
+
+export async function refreshTokenValidate(req : Request,res : Response, next : NextFunction) {
+    try{
+
+        const getToken = req.headers.authorization?.replace("Bearer ", "") as string
+        jwt.verify(getToken, SECRET_KEY)
+
+        const decode = JSON.parse(JSON.stringify(jwt.decode(getToken)))
+
+        if(!decode["isRefreshToken"])
+            throw new ResponseModel("Just only accept refresh token, please check your token",400)
+
+        res.locals.userId = decode["userId"]
+        res.locals.role = decode["role"]
+
         next()
     }catch(e){
         next(e)

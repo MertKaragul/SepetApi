@@ -62,9 +62,51 @@ export async function updatePassword(req : Request, res : Response, next : NextF
         if(!validateInformation.isEmpty())
             throw new ResponseModel("FAILED", 400, validateInformation.array().map(e => e.msg))
 
-        
+        const password = req.body as IAuth
+        const userID = res.locals.userId
+
+        await userEntity.findById(userID).updateOne({password : await (bcrypt.hash(password.password, 10))})
         
         res.json(new ResponseModel("Password successfully updated", 200))
+    }catch(e){
+        next(e)
+    }
+}
+
+
+export async function profile(req : Request, res : Response, next : NextFunction) {
+    try{
+        if(req.method === "PUT"){
+            const validate = validationResult(req)
+            if(!validate.isEmpty())
+                throw new ResponseModel("FAILED", 400, validate.array().map(e => e.msg))
+
+            const body = req.body as IAuth
+
+            await userEntity
+            .findOneAndUpdate({_id : res.locals.userId}, body)
+            .catch(e => {
+                throw new ResponseModel(e.msg, 400)
+            })
+
+            res.json(new ResponseModel("Profile successfully updated", 200))
+        }else{
+            const validate = validationResult(req)
+            if(!validate.isEmpty())
+                throw new ResponseModel("FAILED", 400, validate.array().map(e => e.msg))
+    
+            const user = await userEntity.findById(res.locals.userId)
+    
+            if(user == null)
+                throw new ResponseModel("User not found", 404)
+    
+            
+            res.json({
+                "username" : user.username,
+                "email" : user.email,
+                "image" : user.image
+            })
+        }
     }catch(e){
         next(e)
     }

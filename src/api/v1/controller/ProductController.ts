@@ -97,3 +97,22 @@ export async function deleteProduct(req : Request, res : Response, next : NextFu
         next(e)
     }
 }
+
+export async function updateProduct(req : Request, res : Response, next : NextFunction){
+    try{
+        
+        if(req.files === undefined){
+            // Json or x-www-form
+            const product = req.body as IProduct
+
+
+            console.log("json or x-www-form")
+        }else{
+            // form-data
+            console.log("form-data")
+        }
+        res.json("sa")
+    }catch(e){
+        next(e)
+    }
+}
