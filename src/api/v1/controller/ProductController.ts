@@ -100,18 +100,34 @@ export async function deleteProduct(req : Request, res : Response, next : NextFu
 
 export async function updateProduct(req : Request, res : Response, next : NextFunction){
     try{
-        
         if(req.files === undefined){
+            const valResult = validationResult(req)
+            if(!valResult.isEmpty())
+                throw new ResponseModel("FAILED", 400, valResult.array().map(e => e.msg))
             // Json or x-www-form
             const product = req.body as IProduct
 
+            console.log(product)
 
-            console.log("json or x-www-form")
+            await productEntity.findById(product.id)
+            .updateOne({
+                name : product.name,
+                description: product.description,
+                price : Number.parseFloat(`${product.price}`),
+                discountPrice : Number.parseFloat(`${product.discount}`),
+                discountStatus : (product.discount === undefined || Number.parseFloat(`${product.discount}`) === 0 ? false : true)
+            })
+            .catch(e => {
+                throw new ResponseModel(e, 400)
+            })
+
+            // Number.parseFloat((product.discount === undefined ? "0" : `${product.discount}` ))
+            res.json(new ResponseModel("Product successfully updated", 200))
         }else{
             // form-data
             console.log("form-data")
+            res.json("sa")
         }
-        res.json("sa")
     }catch(e){
         next(e)
     }

@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
-import Role from "../model/enum/Role";
-import ResponseModel from "../model/response/ResponseModel";
+import Role from "../../model/enum/Role";
+import ResponseModel from "../../model/response/ResponseModel";
 
 
 export function adminValidator(req : Request, res : Response, next : NextFunction){

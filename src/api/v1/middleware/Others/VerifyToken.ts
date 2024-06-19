@@ -1,8 +1,8 @@
 import { Request,Response,NextFunction } from "express";
 import jwt from "jsonwebtoken"
-import { SECRET_KEY } from "../config/TokenConfig";
-import userEntity from "../model/entity/UserEntity";
-import ResponseModel from "../model/response/ResponseModel";
+import { SECRET_KEY } from "../../config/TokenConfig";
+import userEntity from "../../model/entity/UserEntity";
+import ResponseModel from "../../model/response/ResponseModel";
 
 export async function accessTokenValidate(req : Request,res : Response, next :NextFunction){
     try{

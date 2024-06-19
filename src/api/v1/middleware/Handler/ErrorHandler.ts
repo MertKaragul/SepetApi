@@ -1,5 +1,5 @@
 import { Request, Response,NextFunction } from "express";
-import ResponseModel from "../model/response/ResponseModel";
+import ResponseModel from "../../model/response/ResponseModel";
 
 export default function(err : Error, req : Request, res : Response, next : NextFunction){
     if(err instanceof ResponseModel){

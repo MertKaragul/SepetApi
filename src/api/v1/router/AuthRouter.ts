@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { login, profile, register, updatePassword } from "../controller/AuthController";
-import { espcateInput, requiredInput } from "../middleware/InputValidators";
-import { accessTokenValidate } from "../middleware/VerifyToken";
+import { espcateInput, requiredInput } from "../middleware/Others/InputValidators";
+import { accessTokenValidate } from "../middleware/Others/VerifyToken";
 
 const authRouter = Router()
 

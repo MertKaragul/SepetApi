@@ -28,8 +28,16 @@ const productModel = new mongoose.Schema({
         type : String,
         required : true
     },
-    discountPrice : Number,
-    discountStatus : Boolean,
+    discountPrice : {
+        type : Number,
+        required : false,
+        default : 0
+    },
+    discountStatus : {
+        type : Boolean,
+        required : false,
+        default : false
+    },
 })
 
 const productEntity = mongoose.model("Product", productModel)
