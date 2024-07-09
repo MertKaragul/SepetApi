@@ -3,5 +3,7 @@ export default interface IProduct{
     name : string,
     description : string,
     price : number,
-    discount? : number
+    discount? : number,
+    selectedImages : string[],
+    categoryId : string,
 }

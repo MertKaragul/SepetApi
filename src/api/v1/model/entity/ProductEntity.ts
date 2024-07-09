@@ -38,6 +38,15 @@ const productModel = new mongoose.Schema({
         required : false,
         default : false
     },
+    productClose : {
+        type : Boolean,
+        required : true,
+        default : false
+    },
+    category : {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Category'
+    }
 })
 
 const productEntity = mongoose.model("Product", productModel)

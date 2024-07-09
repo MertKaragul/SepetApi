@@ -4,10 +4,12 @@ import ResponseModel from "../../model/response/ResponseModel";
 export default function(err : Error, req : Request, res : Response, next : NextFunction){
     if(err instanceof ResponseModel){
         const dto = {
-            "message" : err.name,
+            "message" : err.message,
             "status" : err.status,
-            "messages": err.message 
+            "messages": err.messages
         }
+
+        console.log(dto)
         return res.status(dto.status).json(dto)
     }else{
         const dto = {
@@ -15,6 +17,7 @@ export default function(err : Error, req : Request, res : Response, next : NextF
             "status" : 500,
             "messages": [err.message]
         }
+        console.log(dto)
         return res.status(dto.status).json(dto)
     }
 }

@@ -28,5 +28,25 @@ export function removeFile(file : string){
     }
 }
 
+export function removeFiles(file : string[]){
+    try{
+        if(file.length > 0 )
+            file.forEach(element => {
+                fs.promises.rm(`${path.resolve()}\\storage\\${element}`) 
+            });
+    }catch(e){
+        console.error(e)
+    }
+}
+
+export function fileExists(file : string) : boolean{
+    try{
+        fs.promises.rm(`${path.resolve()}\\storage\\${file}`) 
+        return true
+    }catch(e){
+        return false
+    }
+}
+
 
 export default multerService

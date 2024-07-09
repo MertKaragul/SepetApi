@@ -1,41 +1,20 @@
 import { Router } from "express";
-import { createProduct, deleteProduct, getProducts, updateProduct } from "../controller/ProductController";
-import multerService from "../service/MulterService";
-import { requiredInput } from "../middleware/Others/InputValidators";
-import { accessTokenValidate } from "../middleware/Others/VerifyToken";
-import { adminValidator } from "../middleware/Others/RoleValidator";
-import { updateProductMiddleware } from "../middleware/RouterMiddlewares/ProductMiddleware";
+import { createProduct, deleteMany, deleteProduct, getProducts, updateProduct, updateMany, getProduct } from "../controller/ProductController";
+import { createProductMiddleware, deleteManyProductMiddleware, deleteProductMiddleware, getProductMiddleware, updateManyProductMiddleware, updateProductMiddleware } from "../middleware/RouterMiddlewares/ProductMiddleware";
 const productRouter = Router()
 
 productRouter.get("/", getProducts)
 
-productRouter.post("/create",
-    multerService.array("images", 5),[
-        accessTokenValidate,
-        adminValidator,
-        requiredInput("name")
-        .isLength({min:3 , max : 32})
-        .withMessage("Name must be between 3 and 32 characters"),
+productRouter.post("/create",createProductMiddleware(),createProduct)
 
-        requiredInput("description")
-        .isLength({min:3 , max : 32})
-        .withMessage("Description must be between 3 and 32 characters"),
+productRouter.get("/:id?", getProductMiddleware() , getProduct)
 
-        requiredInput("price")
-        .isLength({min:1 , max : 4})
-        .withMessage("Price must be between 1 and 4 characters"),
-    ],
-    createProduct
-)
+productRouter.delete("/delete/:id?", deleteProductMiddleware(),deleteProduct)
 
-productRouter.delete("/delete/:id?", [
-    accessTokenValidate,
-    adminValidator,
-    requiredInput("id")
-    .isLength({min : 24, max : 24})
-    .withMessage("Product id must only have 24 characters")
-] , deleteProduct)
+productRouter.delete("/deleteMany", deleteManyProductMiddleware(),deleteMany)
 
-productRouter.put("/update",updateProductMiddleware,updateProduct)
+productRouter.put("/update", updateProductMiddleware(),updateProduct)
+
+productRouter.put("/updateMany", updateManyProductMiddleware(),updateMany)
 
 export default productRouter

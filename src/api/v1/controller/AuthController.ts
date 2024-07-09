@@ -25,6 +25,8 @@ export async function register(req : Request, res : Response, next : NextFunctio
             username : user.username,
             password : await bcrypt.hash(user.password, 10),
             email : user.email,
+            address : user.address,
+            phone : user.phone,
             image : "",
             role : Role.USER
         })
