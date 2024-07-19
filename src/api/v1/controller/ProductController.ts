@@ -12,10 +12,32 @@ export async function getProducts(req : Request, res : Response, next : NextFunc
     try{
         const {min, max,category,id} = req.query
 
-        const filterProducts = await productEntity.find(
-            (category != undefined) ? {category : category} : {},
-        ).skip((min == undefined ) ? 0 : Number.parseInt(min.toString()))
+        const ids = id?.toString()
+        .split(",")
+        .map(e => {
+            try{
+                return new mongoose.Types.ObjectId(e)
+            }catch(_){}
+        })
+        .filter(e => e != undefined) ?? []
+        
+
+        const categories = category?.toString()
+        .split(",")
+        .map(e => {
+            try{
+                return new mongoose.Types.ObjectId(e)
+            }catch(_){}
+        })
+        .filter(e => e != undefined) ?? []
+
+        const filterProducts = await productEntity
+        .find({$or: [{_id: {$in : ids}}, {category : { $in : categories}}]})
+        .skip((min == undefined ) ? 0 : Number.parseInt(min.toString()))
         .limit((max == undefined ) ? 15: Number.parseInt(max.toString()))
+
+        if(filterProducts.length <= 0)
+            throw new ResponseModel("Products not found", StatusCode.NOT_FOUND)
 
         const dto = filterProducts.map(e => {
             return {
@@ -40,21 +62,26 @@ export async function getProduct(req : Request, res : Response, next : NextFunct
         if(!valid.isEmpty())
             throw new ResponseModel("FAILED", StatusCode.BAD_REQUEST, valid.array().map(e => e.msg) )
 
-        const {id} = req.params
-        const findProduct = await productEntity.findById(id)
+
+        const {id} = req.query
+        const findProduct = await productEntity.find({_id : id})
 
         if(findProduct == null)
             throw new ResponseModel("Product not found", 404)
 
-        res.json({
-            "id" : findProduct.id,
-            "name" : findProduct.name,
-            "description" : findProduct.description,
-            "price" : findProduct.price,
-            "image" : findProduct.image,
-            "discountPrice" : findProduct.discountPrice,
-            "discountStatus" : findProduct.discountStatus,
+        const dto = findProduct.map(e => {
+            return {
+                "id" : e.id,
+                "name" : e.name,
+                "description" : e.description,
+                "price" : e.price,
+                "image" : e.image,
+                "discountPrice" : e.discountPrice,
+                "discountStatus" : e.discountStatus,
+            }
         })
+
+        res.json(dto)
     }catch(e){
         next(e)
     }

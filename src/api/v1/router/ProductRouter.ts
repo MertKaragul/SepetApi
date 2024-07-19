@@ -3,11 +3,11 @@ import { createProduct, deleteMany, deleteProduct, getProducts, updateProduct, u
 import { createProductMiddleware, deleteManyProductMiddleware, deleteProductMiddleware, getProductMiddleware, updateManyProductMiddleware, updateProductMiddleware } from "../middleware/RouterMiddlewares/ProductMiddleware";
 const productRouter = Router()
 
-productRouter.get("/", getProducts)
+productRouter.get("/",getProducts)
 
 productRouter.post("/create",createProductMiddleware(),createProduct)
 
-productRouter.get("/:id?", getProductMiddleware() , getProduct)
+productRouter.get("/", getProductMiddleware() , getProduct)
 
 productRouter.delete("/delete/:id?", deleteProductMiddleware(),deleteProduct)
 

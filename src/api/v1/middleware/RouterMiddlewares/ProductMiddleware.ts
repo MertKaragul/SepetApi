@@ -4,6 +4,7 @@ import { adminValidator } from "../Others/RoleValidator";
 import multerService from "../../service/MulterService";
 import ResponseModel from "../../model/response/ResponseModel";
 import { body } from "express-validator";
+import mongoose from "mongoose";
 
 
 export function updateProductMiddleware(){
@@ -155,6 +156,6 @@ export function getProductMiddleware(){
     return [
         requiredInput("id")
         .isMongoId()
-        .withMessage("Invalid product id")
+        .withMessage("Product id invalid")
     ]
 }
