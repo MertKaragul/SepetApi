@@ -1,10 +1,11 @@
 import mongoose,{ model, Schema, } from "mongoose";
 
 const cartScheme = new Schema({
-    userId : {
+    user : {
         type : mongoose.Types.ObjectId,
         ref : "user"
     },
+    
     products: [
         {
             product : {
@@ -21,7 +22,7 @@ const cartScheme = new Schema({
     
     ordered : {
         type: Boolean,
-        default : true
+        default : false
     }
 
 })

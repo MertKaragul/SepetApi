@@ -12,7 +12,7 @@ export async function addToCart(req : Request, res : Response, next : NextFuncti
         
         const validate = validationResult(req)
         if(!validate.isEmpty())
-            throw new ResponseModel("FAILED", StatusCode.BAD_REQUEST, validate.array().map(e => e.msg))
+            throw new ResponseModel(validate.array().map(e => e.msg)[0], StatusCode.BAD_REQUEST)
 
         const product = req.body as ICart
         const userId = res.locals.userId
@@ -23,11 +23,11 @@ export async function addToCart(req : Request, res : Response, next : NextFuncti
         if(findProduct == null)
             throw new ResponseModel("Product not found", StatusCode.NOT_FOUND)
 
-        const findActiveCart = await cartModel.findOne({ordered : true})
+        const findActiveCart = await cartModel.findOne({ordered : false})
 
         if(findActiveCart == null){
             await cartModel.create({
-                userId : userId,
+                user : userId,
                 products : [
                     {
                         product : findProduct,
@@ -35,7 +35,7 @@ export async function addToCart(req : Request, res : Response, next : NextFuncti
                     }
                 ]
             })
-            throw new ResponseModel("Product successfully added", StatusCode.SUCCESS)
+            throw new ResponseModel("Product added", StatusCode.SUCCESS)
         }
 
 
@@ -50,7 +50,7 @@ export async function addToCart(req : Request, res : Response, next : NextFuncti
         }
 
         await cartModel.findOneAndUpdate({
-            ordered : true
+            ordered : false
         },findActiveCart)
 
         res.json(new ResponseModel("Products successfully added", StatusCode.SUCCESS))
@@ -62,10 +62,32 @@ export async function addToCart(req : Request, res : Response, next : NextFuncti
 export async function getCart(req : Request, res : Response, next : NextFunction){
     try{
         const userId = res.locals.userId
-        console.log(userId)
-        const userCarts = await cartModel.find({userId : userId})
+        const userCarts = await cartModel.find({user : userId})
         .populate("products.product",["_id","name","image","description","price","discountStatus","discountPrice"])
+
+
         res.json(userCarts)
+    }catch(e){
+        next(e)
+    }
+}
+
+
+export async function orderCart(req : Request, res : Response, next : NextFunction) {
+    try{
+        const validate = validationResult(req)
+        if(!validate.isEmpty())
+            throw new ResponseModel(validate.array().map(e => e.msg)[0], StatusCode.BAD_REQUEST)
+
+        const userId = res.locals.userId
+        const findCart = await cartModel.findOne({user : userId, ordered : false})
+
+        if(findCart == null || findCart == undefined)
+            throw new ResponseModel("We're sorry your cart empty", StatusCode.NOT_FOUND)
+
+        await findCart.updateOne({ordered : true})
+
+        res.json(new ResponseModel("We're take your order!", StatusCode.SUCCESS))
     }catch(e){
         next(e)
     }

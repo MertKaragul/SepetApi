@@ -32,7 +32,7 @@ export async function refreshTokenValidate(req : Request,res : Response, next : 
 
         const decode = JSON.parse(JSON.stringify(jwt.decode(getToken)))
 
-        if(!decode["isRefreshToken"])
+        if(!decode["isRefreshKey"])
             throw new ResponseModel("Just only accept refresh token, please check your token",400)
 
         res.locals.userId = decode["userId"]

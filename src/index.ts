@@ -5,8 +5,8 @@ import ErrorHandler from "./api/v1/middleware/Handler/ErrorHandler"
 import authRouter from "./api/v1/router/AuthRouter"
 import categoryRouter from "./api/v1/router/CategoryRouter"
 import "./api/v1/Extension/StringExtension"
-import orderRouter from "./api/v1/router/OrderRouter"
 import cartRouter from "./api/v1/router/CartRouter"
+import addressRouter from "./api/v1/router/AddressRouter"
 
 const app = express()
 
@@ -18,7 +18,7 @@ app.use("/products", productRouter)
 app.use("/category", categoryRouter)
 app.use("/auth", authRouter)
 app.use("/cart",cartRouter)
-app.use("/order", orderRouter)
+app.use("/address",addressRouter)
 
 app.use(ErrorHandler)
 app.listen(3000)

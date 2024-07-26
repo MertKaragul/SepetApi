@@ -8,6 +8,7 @@ import Role from "../model/enum/Role";
 import jwt from "jsonwebtoken"
 import { EXPIRE_DATE, REFRESH_EXPIRE_DATE, SECRET_KEY } from "../config/TokenConfig";
 
+
 export async function register(req : Request, res : Response, next : NextFunction) {
     try{
         const validateInformation = validationResult(req)
@@ -97,7 +98,9 @@ export async function profile(req : Request, res : Response, next : NextFunction
             if(!validate.isEmpty())
                 throw new ResponseModel("FAILED", 400, validate.array().map(e => e.msg))
     
-            const user = await userEntity.findById(res.locals.userId)
+            const user = await userEntity
+            .findById(res.locals.userId)
+            .populate("address")
     
             if(user == null)
                 throw new ResponseModel("User not found", 404)
@@ -106,9 +109,28 @@ export async function profile(req : Request, res : Response, next : NextFunction
             res.json({
                 "username" : user.username,
                 "email" : user.email,
-                "image" : user.image
+                "image" : user.image,
+                "address" : user.address
             })
         }
+    }catch(e){
+        next(e)
+    }
+}
+
+
+export async function refresh(req : Request, res : Response, next : NextFunction) {
+    try{
+        const validate = validationResult(req)
+        if(!validate.isEmpty())
+            throw new ResponseModel(validate.array().map(e => e.msg)[0], 400)
+
+        const userId = res.locals.userId
+        const role = res.locals.role
+        const accessToken = jwt.sign({userId : userId, role : role},SECRET_KEY,{expiresIn : EXPIRE_DATE})
+        const refreshToken = jwt.sign({userId : userId, role : role, isRefreshKey : true},SECRET_KEY,{expiresIn : REFRESH_EXPIRE_DATE})
+
+        res.json({accessToken, refreshToken})
     }catch(e){
         next(e)
     }

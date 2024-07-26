@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
     },
 
     address : {
-        type:String,
-        required: true
+        type : mongoose.Schema.ObjectId,
+        ref : "DeliveryAddress"  
     },
 
     phone : {
