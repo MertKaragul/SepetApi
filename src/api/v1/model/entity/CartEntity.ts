@@ -15,7 +15,8 @@ const cartScheme = new Schema({
             count : Number
         }
     ],
-    cratedDate : {
+    
+    createdDate : {
         type: Date,
         default : Date.now()
     },
@@ -23,6 +24,13 @@ const cartScheme = new Schema({
     ordered : {
         type: Boolean,
         default : false
+    },
+
+    total : Number,
+
+    deliveryAddress : {
+        type : mongoose.Types.ObjectId,
+        ref : "DeliveryAddress"
     }
 
 })

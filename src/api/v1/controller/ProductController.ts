@@ -41,7 +41,7 @@ export async function getProducts(req : Request, res : Response, next : NextFunc
 
         const dto = filterProducts.map(e => {
             return {
-                "id" : e.id,
+                "_id" : e.id,
                 "name" :e.name,
                 "description" :e.description,
                 "price" :e.price,
@@ -71,7 +71,7 @@ export async function getProduct(req : Request, res : Response, next : NextFunct
 
         const dto = findProduct.map(e => {
             return {
-                "id" : e.id,
+                "_id" : e.id,
                 "name" : e.name,
                 "description" : e.description,
                 "price" : e.price,

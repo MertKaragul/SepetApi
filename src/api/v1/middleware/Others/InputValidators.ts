@@ -11,7 +11,7 @@ export function requiredInput(
     .trim()
 }
 
-export function espcateInput(
+export function escapeInput(
     value : string, 
 ) : ValidationChain{
     return check(value)

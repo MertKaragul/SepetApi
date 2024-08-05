@@ -1,4 +1,4 @@
-import { espcateInput, requiredInput } from "../Others/InputValidators";
+import { escapeInput, requiredInput } from "../Others/InputValidators";
 import { accessTokenValidate } from "../Others/VerifyToken";
 
 export function registerMiddleware(){
@@ -68,25 +68,14 @@ export function updateProfileMiddleware(){
         .withMessage("Your name must be min 3, max 12 characters")
         .optional(),
     
-        espcateInput("email")
+        escapeInput("email")
         .isEmail()
         .withMessage("Send a validate email address")
         .optional(),
-    
-        espcateInput("password")
-        .isStrongPassword()
-        .withMessage("Password must have one uppercase,lowercase,special characters and min 8 length")
+
+        escapeInput("phone")
+        .isMobilePhone("tr-TR")
+        .withMessage("Send a validate phone number")
         .optional(),
-    
-        requiredInput("passwordAgain")
-        .optional()
-        .isStrongPassword()
-        .withMessage("Password must have one uppercase,lowercase,special characters and min 8 length")
-        .custom(async(confirmPassword,{req}) => {
-            const passwordAgain = confirmPassword as string
-            const password = req.body.password as string
-            if(passwordAgain !== password)
-                throw new Error("Passwords must be same")
-        }),
     ]
 }

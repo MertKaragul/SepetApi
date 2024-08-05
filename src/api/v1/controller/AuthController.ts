@@ -86,8 +86,14 @@ export async function profile(req : Request, res : Response, next : NextFunction
 
             const body = req.body as IAuth
 
+            console.log(body)
+
             await userEntity
-            .findOneAndUpdate({_id : res.locals.userId}, body)
+            .findOneAndUpdate({_id : res.locals.userId}, {
+                username : body.username,
+                phone : body.phone,
+                email : body.email
+            })
             .catch(e => {
                 throw new ResponseModel(e.msg, 400)
             })
@@ -110,7 +116,8 @@ export async function profile(req : Request, res : Response, next : NextFunction
                 "username" : user.username,
                 "email" : user.email,
                 "image" : user.image,
-                "address" : user.address
+                "address" : user.address,
+                "phone" : user.phone
             })
         }
     }catch(e){

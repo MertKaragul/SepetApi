@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { addToCart, getCart, orderCart } from "../controller/CartController";
-import { addToCartMiddleware } from "../middleware/RouterMiddlewares/CartMiddleware";
+import { addToCart, deleteCartProduct, getCart, orderCart, updateCart } from "../controller/CartController";
+import { addToCartMiddleware, deleteCartProductMiddleware,  updateCartMiddleware } from "../middleware/RouterMiddlewares/CartMiddleware";
 import { accessTokenValidate } from "../middleware/Others/VerifyToken";
 const cartRouter = Router()
 
 cartRouter.post("/", accessTokenValidate,addToCartMiddleware(),addToCart)
 
-cartRouter.get("/", accessTokenValidate,getCart)
+cartRouter.put("/", accessTokenValidate, updateCartMiddleware(), updateCart)
+
+cartRouter.get("/:ordered?", accessTokenValidate,getCart)
+
+cartRouter.delete("/:id?", accessTokenValidate, deleteCartProductMiddleware(), deleteCartProduct)
 
 cartRouter.post("/order", accessTokenValidate, orderCart)
 

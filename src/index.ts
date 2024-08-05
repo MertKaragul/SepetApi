@@ -4,7 +4,7 @@ import "../src/api/v1/service/DatabaseService"
 import ErrorHandler from "./api/v1/middleware/Handler/ErrorHandler"
 import authRouter from "./api/v1/router/AuthRouter"
 import categoryRouter from "./api/v1/router/CategoryRouter"
-import "./api/v1/Extension/StringExtension"
+import "./api/v1/extension/StringExtension"
 import cartRouter from "./api/v1/router/CartRouter"
 import addressRouter from "./api/v1/router/AddressRouter"
 

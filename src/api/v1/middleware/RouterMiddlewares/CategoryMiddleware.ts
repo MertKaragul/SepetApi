@@ -1,5 +1,5 @@
 import multerService from "../../service/MulterService";
-import { espcateInput, requiredInput } from "../Others/InputValidators";
+import { escapeInput, requiredInput } from "../Others/InputValidators";
 import { adminValidator } from "../Others/RoleValidator";
 import { accessTokenValidate } from "../Others/VerifyToken";
 
@@ -41,6 +41,6 @@ export function updateCategoryMiddleware(){
         .isMongoId()
         .withMessage("Invalid category id"),
         
-        espcateInput("name")
+        escapeInput("name")
     ]
 }

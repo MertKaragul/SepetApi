@@ -18,7 +18,7 @@ export async function getAddress(req : Request, res : Response, next : NextFunct
 
         const dto = findAddress.map(e => {
             return {
-                "id" : e.id,
+                "_id" : e.id,
                 "name" : e.name,
                 "address" : e.address,
                 "postCode" : e.postCode,
@@ -36,7 +36,6 @@ export async function getAddress(req : Request, res : Response, next : NextFunct
 
 export async function addAddress(req : Request, res : Response, next : NextFunction) {
     try{
-        console.log(req.body)
         const validate = validationResult(req)
         if(!validate.isEmpty())
             throw new ResponseModel(validate.array().map(e => e.msg)[0], StatusCode.BAD_REQUEST)
